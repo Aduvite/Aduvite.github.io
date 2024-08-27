@@ -62,3 +62,11 @@
 #recent-posts .recent-post-item .recent-post-info .article-title:hover {
   color: var(--anzhiyu-theme)
 }
+
+#post-info {
+  position: absolute;
+  bottom: 100px;  
+  padding: 0 8%;
+  width: 50%;
+  text-align: center; /* 文章标题信息居中 */
+}
