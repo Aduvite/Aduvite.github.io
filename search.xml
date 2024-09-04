@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>B+Tree</title>
+      <link href="/2024/09/01/B-%E6%A0%91/"/>
+      <url>/2024/09/01/B-%E6%A0%91/</url>
+      
+        <content type="html"><![CDATA[<h2 id="B-Tree简介"><a href="#B-Tree简介" class="headerlink" title="B+Tree简介"></a>B+Tree简介</h2><blockquote><ul><li>B+Tree是在B-Tree的基础上的一种优化,满足B-Tree的性质.</li><li>非根节点关键字个数满足[m &#x2F; 2] - 1 &lt;&#x3D; keynum &lt;&#x3D; m,即内部子树个数(childnum)可以与关键字个数相等(keynum).</li><li>内部子树的关键字存储的为实际数据的副本,即只提供查找索引,存放的为其子树中最大的关键字值,实际数据只存放在叶子节点中.</li><li>B+树内部节点不存储数据，所有 data 存储在叶节点导致查询时间复杂度固定为 log(n)。而B-树查询时间复杂度不固定，与 key 在树中的位置有关，最好为O(1).</li><li>所有叶子结点之间用一个链指针相连.</li></ul></blockquote><h2 id="B-Tree结构体定义"><a href="#B-Tree结构体定义" class="headerlink" title="B+Tree结构体定义"></a>B+Tree结构体定义</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">Node</span> &#123;</span><br><span class="line">    <span class="type">int</span> level;</span><br><span class="line">    <span class="type">int</span> keynum;</span><br><span class="line">    <span class="type">int</span> childnum;</span><br><span class="line">    <span class="type">int</span>* keys;</span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">Node</span>* parent;</span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">Node</span>** children;</span><br><span class="line">&#125;Node;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">Leaf</span> &#123;</span><br><span class="line">    Node** next; <span class="comment">//叶子结点链式链接</span></span><br><span class="line">    Node* first; <span class="comment">//指向第一个叶子节点</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><hr><blockquote><p>B+Tree的插入操作和删除操作与B-Tree类似,这里介绍删除操作中的不同</p></blockquote><h2 id="B-Tree的删除"><a href="#B-Tree的删除" class="headerlink" title="B+Tree的删除"></a>B+Tree的删除</h2><ul><li>直接删除<br>叶子节点中的数据删除后若其在根节点中作为一个索引值,在不对树结构造成影响的情况下索引值可以不删除,造成影响则需要进行改变</li><li>不能直接删除<blockquote><ul><li>进行借操作或合并操作</li><li>借操作直接向左(右)兄弟节点中的合适key值拿来补位.</li><li>合并操作直接向左(右)兄弟进行合并,若合并后当前节点的父节点的childnum不满足性质,则需要向左兄弟借节点来满足,左兄弟节点为当前节点的父节点的左兄弟节点的最右子树.</li><li>任何调整操作在树结构中要对相应的索引值进行改变</li></ul></blockquote></li></ul><hr>]]></content>
+      
+      
+      <categories>
+          
+          <category> 数据结构 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> B+Tree </tag>
+            
+            <tag> c++ </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Balance-Tree</title>
       <link href="/2024/08/20/B%E6%A0%91/"/>
       <url>/2024/08/20/B%E6%A0%91/</url>
@@ -20,9 +47,9 @@
       
         <tags>
             
-            <tag> B-Tree </tag>
-            
             <tag> c++ </tag>
+            
+            <tag> B-Tree </tag>
             
         </tags>
       
@@ -53,6 +80,17 @@
     
     
     <entry>
+      <title></title>
+      <link href="/css/photo.css"/>
+      <url>/css/photo.css</url>
+      
+        <content type="html"><![CDATA[/* 页脚与头图透明 */#footer {    background: transparent !important;  }  #page-header {    background: transparent !important;  }    /* 白天模式遮罩透明 */  #footer::before {    background: transparent !important;  }  #page-header::before {    background: transparent !important;  }    /* 夜间模式遮罩透明 */  [data-theme="dark"] #footer::before {    background: transparent !important;  }  [data-theme="dark"] #page-header::before {    background: transparent !important;  }/* 文章卡片擦亮动画及文章栏 */#recent-posts>.recent-post-item .post_cover {  position: relative;}#recent-posts>.recent-post-item .post_cover::after {  position: absolute;  top: 0;  left: 0;  width: 100%;  height: 100%;  background: rgba(255, 255, 255, .5);  content: '';  -webkit-transition: -webkit-transform .3s;  -moz-transition: -moz-transform .3s;  -o-transition: -o-transform .3s;  -ms-transition: -ms-transform .3s;  transition: transform .3s;  -webkit-transform: scale3d(2, 1, 1) rotate(60deg) translate3d(15%, -150%, 0);  -moz-transform: scale3d(2, 1, 1) rotate(60deg) translate3d(15%, -150%, 0);  -o-transform: scale3d(2, 1, 1) rotate(60deg) translate3d(15%, -150%, 0);  -ms-transform: scale3d(2, 1, 1) rotate(60deg) translate3d(15%, -150%, 0);  transform: scale3d(2, 1, 1) rotate(60deg) translate3d(15%, -150%, 0);}#recent-posts>.recent-post-item .post_cover:hover::after {  -webkit-transform: scale3d(2, 1, 1) rotate(60deg) translate3d(0, 130%, 0);  -moz-transform: scale3d(2, 1, 1) rotate(60deg) translate3d(0, 130%, 0);  -o-transform: scale3d(2, 1, 1) rotate(60deg) translate3d(0, 130%, 0);  -ms-transform: scale3d(2, 1, 1) rotate(60deg) translate3d(0, 130%, 0);  transform: scale3d(2, 1, 1) rotate(60deg) translate3d(0, 130%, 0);}#recent-posts .recent-post-item:hover {  border: var(--style-border-hover)}#recent-posts .recent-post-item .recent-post-info .article-title:hover {  color: var(--anzhiyu-theme)}#post-info {  position: absolute;  bottom: 100px;    padding: 0 8%;  width: 50%;  text-align: center; /* 文章标题信息居中 */}]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>关于</title>
       <link href="/about/index.html"/>
       <url>/about/index.html</url>
@@ -64,22 +102,11 @@
     
     
     <entry>
-      <title>分类</title>
-      <link href="/categories/index.html"/>
-      <url>/categories/index.html</url>
+      <title>音乐</title>
+      <link href="/music/index.html"/>
+      <url>/music/index.html</url>
       
-        <content type="html"><![CDATA[]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title></title>
-      <link href="/css/photo.css"/>
-      <url>/css/photo.css</url>
-      
-        <content type="html"><![CDATA[/* 页脚与头图透明 */#footer {    background: transparent !important;  }  #page-header {    background: transparent !important;  }    /* 白天模式遮罩透明 */  #footer::before {    background: transparent !important;  }  #page-header::before {    background: transparent !important;  }    /* 夜间模式遮罩透明 */  [data-theme="dark"] #footer::before {    background: transparent !important;  }  [data-theme="dark"] #page-header::before {    background: transparent !important;  }/* 文章卡片擦亮动画及文章栏 */#recent-posts>.recent-post-item .post_cover {  position: relative;}#recent-posts>.recent-post-item .post_cover::after {  position: absolute;  top: 0;  left: 0;  width: 100%;  height: 100%;  background: rgba(255, 255, 255, .5);  content: '';  -webkit-transition: -webkit-transform .3s;  -moz-transition: -moz-transform .3s;  -o-transition: -o-transform .3s;  -ms-transition: -ms-transform .3s;  transition: transform .3s;  -webkit-transform: scale3d(2, 1, 1) rotate(60deg) translate3d(15%, -150%, 0);  -moz-transform: scale3d(2, 1, 1) rotate(60deg) translate3d(15%, -150%, 0);  -o-transform: scale3d(2, 1, 1) rotate(60deg) translate3d(15%, -150%, 0);  -ms-transform: scale3d(2, 1, 1) rotate(60deg) translate3d(15%, -150%, 0);  transform: scale3d(2, 1, 1) rotate(60deg) translate3d(15%, -150%, 0);}#recent-posts>.recent-post-item .post_cover:hover::after {  -webkit-transform: scale3d(2, 1, 1) rotate(60deg) translate3d(0, 130%, 0);  -moz-transform: scale3d(2, 1, 1) rotate(60deg) translate3d(0, 130%, 0);  -o-transform: scale3d(2, 1, 1) rotate(60deg) translate3d(0, 130%, 0);  -ms-transform: scale3d(2, 1, 1) rotate(60deg) translate3d(0, 130%, 0);  transform: scale3d(2, 1, 1) rotate(60deg) translate3d(0, 130%, 0);}#recent-posts .recent-post-item:hover {  border: var(--style-border-hover)}#recent-posts .recent-post-item .recent-post-info .article-title:hover {  color: var(--anzhiyu-theme)}#post-info {  position: absolute;  bottom: 100px;    padding: 0 8%;  width: 50%;  text-align: center; /* 文章标题信息居中 */}]]></content>
+        <content type="html"><![CDATA[<h2 id="推荐网站"><a href="#推荐网站" class="headerlink" title="推荐网站"></a>推荐网站</h2><blockquote><ul><li><a href="https://music.163.com/">https://music.163.com</a> </li><li><a href="https://tool.liumingye.cn/music">https://tool.liumingye.cn/music</a></li></ul></blockquote>]]></content>
       
     </entry>
     
@@ -97,11 +124,11 @@
     
     
     <entry>
-      <title>音乐</title>
-      <link href="/music/index.html"/>
-      <url>/music/index.html</url>
+      <title>分类</title>
+      <link href="/categories/index.html"/>
+      <url>/categories/index.html</url>
       
-        <content type="html"><![CDATA[<h2 id="推荐网站"><a href="#推荐网站" class="headerlink" title="推荐网站"></a>推荐网站</h2><blockquote><ul><li><a href="https://music.163.com/">https://music.163.com</a> </li><li><a href="https://tool.liumingye.cn/music">https://tool.liumingye.cn/music</a></li></ul></blockquote>]]></content>
+        <content type="html"><![CDATA[]]></content>
       
     </entry>
     
