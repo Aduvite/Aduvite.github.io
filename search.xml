@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search> 
+  
+  
+    
+    <entry>
+      <title>B+Tree</title>
+      <link href="/2024/09/01/B-%E6%A0%91/"/>
+      <url>/2024/09/01/B-%E6%A0%91/</url>
+      
+        <content type="html"><![CDATA[<h2 id="B-Tree简介"><a href="#B-Tree简介" class="headerlink" title="B+Tree简介"></a>B+Tree简介</h2><blockquote><ul><li>B+Tree是在B-Tree的基础上的一种优化,满足B-Tree的性质.</li><li>非根节点关键字个数满足[m &#x2F; 2] - 1 &lt;&#x3D; keynum &lt;&#x3D; m,即内部子树个数(childnum)可以与关键字个数相等(keynum).</li><li>内部子树的关键字存储的为实际数据的副本,即只提供查找索引,存放的为其子树中最大的关键字值,实际数据只存放在叶子节点中.</li><li>B+树内部节点不存储数据，所有 data 存储在叶节点导致查询时间复杂度固定为 log(n)。而B-树查询时间复杂度不固定，与 key 在树中的位置有关，最好为O(1).</li><li>所有叶子结点之间用一个链指针相连.</li></ul></blockquote><h2 id="B-Tree结构体定义"><a href="#B-Tree结构体定义" class="headerlink" title="B+Tree结构体定义"></a>B+Tree结构体定义</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">Node</span> &#123;</span><br><span class="line">    <span class="type">int</span> level;</span><br><span class="line">    <span class="type">int</span> keynum;</span><br><span class="line">    <span class="type">int</span> childnum;</span><br><span class="line">    <span class="type">int</span>* keys;</span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">Node</span>* parent;</span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">Node</span>** children;</span><br><span class="line">&#125;Node;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">Leaf</span> &#123;</span><br><span class="line">    Node** next; <span class="comment">//叶子结点链式链接</span></span><br><span class="line">    Node* first; <span class="comment">//指向第一个叶子节点</span></span><br><span class="line">&#125;son</span><br></pre></td></tr></table></figure><hr><blockquote><p>B+Tree的插入操作和删除操作与B-Tree类似,这里介绍删除操作中的不同</p></blockquote><h2 id="B-Tree的删除"><a href="#B-Tree的删除" class="headerlink" title="B+Tree的删除"></a>B+Tree的删除</h2><ul><li>直接删除<br>叶子节点中的数据删除后若其在根节点中作为一个索引值,在不对树结构造成影响的情况下索引值可以不删除,造成影响则需要进行改变</li><li>不能直接删除<blockquote><ul><li>进行借操作或合并操作</li><li>借操作直接向左(右)兄弟节点中的合适key值拿来补位.</li><li>合并操作直接向左(右)兄弟进行合并,若合并后当前节点的父节点的childnum不满足性质,则需要向左兄弟借节点来满足,左兄弟节点为当前节点的父节点的左兄弟节点的最右子树.</li><li>任何调整操作在树结构中要对相应的索引值进行改变</li></ul></blockquote></li></ul><hr>]]></content>
+      
+      
+      <categories>
+          
+          <category> 数据结构 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> B+Tree </tag>
+            
+            <tag> c++ </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Balance-Tree</title>
+      <link href="/2024/08/20/B%E6%A0%91/"/>
+      <url>/2024/08/20/B%E6%A0%91/</url>
+      
+        <content type="html"><![CDATA[<h2 id="Banlance-Tree简介"><a href="#Banlance-Tree简介" class="headerlink" title="Banlance-Tree简介:"></a>Banlance-Tree简介:</h2><blockquote><ul><li>B树是一种多路平衡查找树,一棵m阶B树是一棵平衡的m路搜索树.</li><li>非根节点所包含的关键字个数满足 [m &#x2F; 2] - 1 &lt;&#x3D; keynum &lt;&#x3D; m - 1.</li><li>内部子树的个数满足 [m &#x2F; 2] &lt;&#x3D; childnum &lt;&#x3D; m.</li><li>根节点至少有两个孩子.</li><li>所有叶子结点都在同一层.</li></ul></blockquote><h2 id="Balance-Tree核心操作"><a href="#Balance-Tree核心操作" class="headerlink" title="Balance-Tree核心操作"></a>Balance-Tree核心操作</h2><h2 id="1-B-Tree的插入"><a href="#1-B-Tree的插入" class="headerlink" title="1.B-Tree的插入"></a>1.B-Tree的插入</h2><p>B树的插入操作只在叶子结点上进行,叶子结点的关键字个数严格满足B树性质.</p><blockquote><ul><li>1.先寻找合适的叶子结点.</li><li>2.在叶子节点上寻找合适的插入位置.</li><li>3.插入后判断关键字个数是否超过m-1,如果超过则结点需要分裂,分裂从中间劈开,并将中间的元素上升(插入)到当前结点的父亲结点中,判断父亲结点关键字个数是否超过m-1,如果超过继续分裂,重复第3步.</li></ul></blockquote><h2 id="伪代码"><a href="#伪代码" class="headerlink" title="伪代码"></a>伪代码</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">AddData</span><span class="params">(Node* node, <span class="type">int</span> data, Node** T)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> index = <span class="built_in">Find_Suit_Index</span>(node, data);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = node -&gt; keynum; i &gt;= index; --i) &#123;</span><br><span class="line">        node -&gt; keys[i + <span class="number">1</span>] = node -&gt; keys[i];</span><br><span class="line">    &#125;</span><br><span class="line">    node -&gt; keys[index] = data;</span><br><span class="line">    node -&gt; keynum++;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (node -&gt; keynum == node -&gt; level) &#123; <span class="comment">//达到限制条件进行分裂</span></span><br><span class="line">        <span class="type">int</span> mid = node -&gt; level / <span class="number">2</span> + node -&gt; level % <span class="number">2</span>;</span><br><span class="line">        Node* lchild = <span class="built_in">initNode</span>(node -&gt; level); <span class="comment">//初始化左孩子节点</span></span><br><span class="line">        Node* rchild = <span class="built_in">initNode</span>(node -&gt; level); <span class="comment">//初始化右孩子节点</span></span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        for (int i = 0; i &lt; mid; ++i) &#123;</span></span><br><span class="line"><span class="comment">            lchild -&gt; keys[i] = node -&gt; keys[i];</span></span><br><span class="line"><span class="comment">            lchild -&gt; keynum++;</span></span><br><span class="line"><span class="comment">        &#125;</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt; mid; ++i) &#123; <span class="comment">//将mid左边的值赋值给左孩子</span></span><br><span class="line">            <span class="built_in">AddData</span>(lchild, node -&gt; keys[i], T);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = mid + <span class="number">1</span>; i &lt;= node -&gt; keynum; ++i) &#123; <span class="comment">//将mid右边的值赋值给右孩子</span></span><br><span class="line">            <span class="built_in">AddData</span>(rchild, node -&gt; keys[i], T);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; mid; ++i) &#123; <span class="comment">//将分裂前mid的左孩子(左子节点)赋值给分裂后的左孩子</span></span><br><span class="line">            lchild -&gt; children[i] = node -&gt; children[i];</span><br><span class="line">            <span class="keyword">if</span> (node -&gt; children[i] != <span class="literal">nullptr</span>) &#123;</span><br><span class="line">                node -&gt; children[i] -&gt; parent = lchild;</span><br><span class="line">                lchild -&gt; childnum++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">int</span> index = <span class="number">0</span>; </span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = mid; i &lt; node -&gt; childnum; ++i) &#123; <span class="comment">//将分裂前mid的右孩子(右子节点)赋值给分裂后的右孩子</span></span><br><span class="line">            rchild -&gt; children[index++] = node -&gt; children[i];</span><br><span class="line">            <span class="keyword">if</span> (node -&gt; children[i] != <span class="literal">nullptr</span>) &#123;</span><br><span class="line">                node -&gt; children[i] -&gt; parent = rchild;</span><br><span class="line">                rchild -&gt; childnum++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (node -&gt; parent == <span class="literal">nullptr</span>) &#123;</span><br><span class="line">            Node* newparent = <span class="built_in">initNode</span>(node -&gt; level);</span><br><span class="line">            <span class="built_in">AddData</span>(newparent, node -&gt; keys[mid], T);</span><br><span class="line">            newparent -&gt; children[<span class="number">0</span>] = lchild;</span><br><span class="line">            newparent -&gt; children[<span class="number">1</span>] = rchild;</span><br><span class="line">            newparent -&gt; childnum = <span class="number">2</span>;</span><br><span class="line">            lchild -&gt; parent = newparent;</span><br><span class="line">            rchild -&gt; parent = newparent;</span><br><span class="line">            *T = newparent;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="type">int</span> index =  <span class="built_in">Find_Suit_Index</span>(node -&gt; parent, node -&gt; keys[mid]);</span><br><span class="line">            lchild -&gt; parent = node -&gt; parent;</span><br><span class="line">            rchild -&gt; parent = node -&gt; parent;</span><br><span class="line">            node -&gt; parent -&gt; children[index - <span class="number">1</span>] = lchild;</span><br><span class="line">            <span class="keyword">if</span> (node -&gt; parent -&gt; children[index] != <span class="literal">nullptr</span>) &#123;</span><br><span class="line">                <span class="keyword">for</span> (<span class="type">int</span> i = node -&gt; parent -&gt; childnum - <span class="number">1</span>; i &gt;= index; --i) &#123;</span><br><span class="line">                    node -&gt; parent -&gt; children[i + <span class="number">1</span>] = node -&gt; parent -&gt; children[i];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            node -&gt; parent -&gt; children[index] = rchild;</span><br><span class="line">            node -&gt; parent -&gt; childnum++;</span><br><span class="line">            <span class="built_in">AddData</span>(node -&gt; parent, node -&gt; keys[mid], T);            </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h2 id="2-B-Tree的删除"><a href="#2-B-Tree的删除" class="headerlink" title="2.B-Tree的删除"></a>2.B-Tree的删除</h2><p>B树的删除操作需要分情况讨论<br>首先判断要删除的关键字是否在叶子结点上<br>在叶子节点上:</p><blockquote><ul><li>当前节点关键字个数在删除后仍满足性质,直接删除.</li><li>当前节点关键字个数在删除后不满足性质.<br>  -&gt; 1.向左右兄弟进行借操作:从父亲节点中找到合适的关键字(借下来)下移,从左(右)兄弟中找最右(左)边的关键字(补上去)上移.<br>  -&gt; 2.借操作不满足条件,进行合并操作:从父亲节点中找到合适的关键字插入(下移)到左兄弟节点中,将当前节点关键字补到左兄弟节点中(与其合并为一个节点).</li></ul></blockquote><p>在非叶子节点上:</p><blockquote><ul><li>将要删除的关键字与当前节点左子树中叶子上最大的关键字进行对调.</li><li>将非叶子节点的删除转化为叶子结点的删除.</li></ul></blockquote><h2 id="伪代码-1"><a href="#伪代码-1" class="headerlink" title="伪代码"></a>伪代码</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">DeleteData</span><span class="params">(Node* node, <span class="type">int</span> data, Node** T, <span class="type">int</span> NodeIndex)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> index = <span class="built_in">Find_DeleteData_Index</span>(node, data);</span><br><span class="line">    <span class="keyword">if</span> (node != <span class="literal">nullptr</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (node -&gt; childnum == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="comment">//叶子结点</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> i = index; i &lt;= node -&gt; keynum; ++i) &#123;</span><br><span class="line">                node -&gt; keys[i] = node -&gt; keys[i + <span class="number">1</span>];</span><br><span class="line">            &#125;</span><br><span class="line">            node -&gt; keynum--;</span><br><span class="line">            <span class="keyword">if</span> (node -&gt; keynum == (<span class="built_in">getCeil</span>&lt;<span class="type">int</span>&gt;(node -&gt; level) - <span class="number">2</span>)) &#123; <span class="comment">//keynum &lt; [level / 2] - 1</span></span><br><span class="line">                <span class="comment">//int NodeIndex = Find_DeleteNode_Index(a -&gt; parent, data);</span></span><br><span class="line"></span><br><span class="line">                <span class="comment">//可以借</span></span><br><span class="line">                <span class="keyword">if</span> (node -&gt; parent -&gt; children[NodeIndex - <span class="number">1</span>] -&gt; keynum &gt;= <span class="built_in">getCeil</span>&lt;<span class="type">int</span>&gt;(node -&gt; level) || node -&gt; parent -&gt; children[NodeIndex + <span class="number">1</span>] -&gt; keynum &gt;= <span class="built_in">getCeil</span>&lt;<span class="type">int</span>&gt;(node -&gt; level)) &#123;</span><br><span class="line">                    <span class="built_in">Borrow_LR_Node</span>(node, index, NodeIndex);</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="comment">//不可以借</span></span><br><span class="line">                <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="comment">//合并操作</span></span><br><span class="line">                    Node* L_Brother = node -&gt; parent -&gt; children[NodeIndex - <span class="number">1</span>]; <span class="comment">//node将被释放node传参用L_Brother代替</span></span><br><span class="line">                    <span class="built_in">Consolidation</span>(node, index, NodeIndex, T);</span><br><span class="line"></span><br><span class="line">                    <span class="comment">//获得必要的参数</span></span><br><span class="line">                    <span class="type">int</span> index_1 = <span class="built_in">Find_DeleteData_Index</span>(L_Brother -&gt; parent, L_Brother -&gt; parent -&gt; keys[<span class="number">1</span>]);</span><br><span class="line">                    Node* ParentNode = <span class="built_in">find</span>(*T, L_Brother -&gt; parent -&gt; keys[<span class="number">1</span>]);</span><br><span class="line">                    <span class="type">int</span> ParentNode_Index = <span class="built_in">Find_DeleteNode_Index</span>(ParentNode);</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= L_Brother -&gt; parent -&gt; keynum; ++i) &#123; <span class="comment">//对父亲节点中的关键字进行前移操作,被覆盖的关键字为第一个索引的值</span></span><br><span class="line">                        L_Brother -&gt; parent -&gt; keys[i] = L_Brother -&gt; parent -&gt; keys[i + <span class="number">1</span>];</span><br><span class="line">                    &#125;</span><br><span class="line">                    L_Brother -&gt; parent -&gt; keynum--;</span><br><span class="line">                    <span class="keyword">if</span> (L_Brother -&gt; parent -&gt; keynum == (<span class="built_in">getCeil</span>&lt;<span class="type">int</span>&gt;(L_Brother -&gt; level) - <span class="number">2</span>)) &#123; <span class="comment">//合并后根节点不满足条件</span></span><br><span class="line">                        Node* L_B_P_P = L_Brother -&gt; parent -&gt; parent;</span><br><span class="line">                         <span class="keyword">if</span> (L_B_P_P -&gt; children[ParentNode_Index - <span class="number">1</span>] == <span class="literal">nullptr</span> &amp;&amp; L_B_P_P -&gt; children[ParentNode_Index + <span class="number">1</span>] ) &#123; <span class="comment">//向右孩子借</span></span><br><span class="line">                            <span class="keyword">if</span> (L_B_P_P -&gt; children[ParentNode_Index + <span class="number">1</span>] -&gt; keynum == <span class="built_in">getCeil</span>&lt;<span class="type">int</span>&gt;(node -&gt; level))</span><br><span class="line">                                <span class="built_in">Borrow_LR_Node</span>(L_Brother -&gt; parent, index_1, ParentNode_Index);</span><br><span class="line">                         &#125;</span><br><span class="line">                         <span class="keyword">else</span> <span class="keyword">if</span> (L_B_P_P -&gt; children[ParentNode_Index - <span class="number">1</span>] &amp;&amp; L_B_P_P -&gt; children[ParentNode_Index + <span class="number">1</span>] == <span class="literal">nullptr</span>) &#123; <span class="comment">//向左孩子借</span></span><br><span class="line">                            <span class="keyword">if</span> (L_B_P_P -&gt; children[ParentNode_Index - <span class="number">1</span>] -&gt; keynum == <span class="built_in">getCeil</span>&lt;<span class="type">int</span>&gt;(node -&gt; level))</span><br><span class="line">                                <span class="built_in">Borrow_LR_Node</span>(L_Brother -&gt; parent, index_1, ParentNode_Index);</span><br><span class="line">                         &#125;</span><br><span class="line">                         <span class="comment">/*</span></span><br><span class="line"><span class="comment">                         else if (L_B_P_P -&gt; children[ParentNode_Index - 1] &amp;&amp; L_B_P_P -&gt; children[ParentNode_Index + 1] ) &#123;</span></span><br><span class="line"><span class="comment">                            if (L_B_P_P -&gt; children[ParentNode_Index - 1] -&gt; keynum == getCeil&lt;int&gt;(node -&gt; level) || L_B_P_P -&gt; children[ParentNode_Index + 1] -&gt; keynum == getCeil&lt;int&gt;(node -&gt; level))</span></span><br><span class="line"><span class="comment">                                Borrow_LR_Node(L_Brother -&gt; parent, index_1, ParentNode_Index);</span></span><br><span class="line"><span class="comment">                         &#125;</span></span><br><span class="line"><span class="comment">                         */</span></span><br><span class="line">                         <span class="keyword">else</span> &#123;</span><br><span class="line">                            <span class="built_in">Consolidation</span>(L_Brother -&gt; parent, index_1, ParentNode_Index, T);</span><br><span class="line">                         &#125;</span><br><span class="line">                    &#125;           </span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">//非叶子结点</span></span><br><span class="line">            <span class="keyword">if</span> (node -&gt; children[index - <span class="number">1</span>] != <span class="literal">nullptr</span> || node-&gt;children[index] != <span class="literal">nullptr</span>) &#123; <span class="comment">//将要替换的关键字与左子树的子节点中的最大关键字对调(左子树中叶子上最大的关键字)</span></span><br><span class="line">                <span class="type">int</span> key = <span class="built_in">Find_BigestKey_In_Ltree_Of_Node</span>(node -&gt; children[index - <span class="number">1</span>]);</span><br><span class="line">                <span class="built_in">SwapData</span>&lt;<span class="type">int</span>&gt;(&amp;node -&gt; keys[index], &amp;key);</span><br><span class="line">                <span class="built_in">DeleteData</span>(<span class="built_in">Find_BigestKey_Node</span>(node -&gt; children[index - <span class="number">1</span>]), <span class="built_in">Find_BigestKey_In_Ltree_Of_Node</span>(node -&gt; children[index - <span class="number">1</span>]), T, NodeIndex);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> 数据结构 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> c++ </tag>
+            
+            <tag> B-Tree </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>第一篇Blog</title>
+      <link href="/2024/07/28/FirstBlog/"/>
+      <url>/2024/07/28/FirstBlog/</url>
+      
+        <content type="html"><![CDATA[<h1 id="Welcome-to-Blog"><a href="#Welcome-to-Blog" class="headerlink" title="Welcome to Blog"></a>Welcome to Blog</h1><blockquote><ul><li>欢迎来到我的博客</li></ul></blockquote>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> Blog </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+  
+  
+    
+    
+    <entry>
+      <title>分类</title>
+      <link href="/categories/index.html"/>
+      <url>/categories/index.html</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>标签</title>
+      <link href="/tags/index.html"/>
+      <url>/tags/index.html</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title></title>
+      <link href="/css/photo.css"/>
+      <url>/css/photo.css</url>
+      
+        <content type="html"><![CDATA[/* 页脚与头图透明 */#footer {    background: transparent !important;  }  #page-header {    background: transparent !important;  }    /* 白天模式遮罩透明 */  #footer::before {    background: transparent !important;  }  #page-header::before {    background: transparent !important;  }    /* 夜间模式遮罩透明 */  [data-theme="dark"] #footer::before {    background: transparent !important;  }  [data-theme="dark"] #page-header::before {    background: transparent !important;  }/* 文章卡片擦亮动画及文章栏 */#recent-posts>.recent-post-item .post_cover {  position: relative;}#recent-posts>.recent-post-item .post_cover::after {  position: absolute;  top: 0;  left: 0;  width: 100%;  height: 100%;  background: rgba(255, 255, 255, .5);  content: '';  -webkit-transition: -webkit-transform .3s;  -moz-transition: -moz-transform .3s;  -o-transition: -o-transform .3s;  -ms-transition: -ms-transform .3s;  transition: transform .3s;  -webkit-transform: scale3d(2, 1, 1) rotate(60deg) translate3d(15%, -150%, 0);  -moz-transform: scale3d(2, 1, 1) rotate(60deg) translate3d(15%, -150%, 0);  -o-transform: scale3d(2, 1, 1) rotate(60deg) translate3d(15%, -150%, 0);  -ms-transform: scale3d(2, 1, 1) rotate(60deg) translate3d(15%, -150%, 0);  transform: scale3d(2, 1, 1) rotate(60deg) translate3d(15%, -150%, 0);}#recent-posts>.recent-post-item .post_cover:hover::after {  -webkit-transform: scale3d(2, 1, 1) rotate(60deg) translate3d(0, 130%, 0);  -moz-transform: scale3d(2, 1, 1) rotate(60deg) translate3d(0, 130%, 0);  -o-transform: scale3d(2, 1, 1) rotate(60deg) translate3d(0, 130%, 0);  -ms-transform: scale3d(2, 1, 1) rotate(60deg) translate3d(0, 130%, 0);  transform: scale3d(2, 1, 1) rotate(60deg) translate3d(0, 130%, 0);}#recent-posts .recent-post-item:hover {  border: var(--style-border-hover)}#recent-posts .recent-post-item .recent-post-info .article-title:hover {  color: var(--anzhiyu-theme)}#post-info {  position: absolute;  bottom: 100px;    padding: 0 8%;  width: 50%;  text-align: center; /* 文章标题信息居中 */}]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>关于</title>
+      <link href="/about/index.html"/>
+      <url>/about/index.html</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>音乐</title>
+      <link href="/music/index.html"/>
+      <url>/music/index.html</url>
+      
+        <content type="html"><![CDATA[<h2 id="推荐网站"><a href="#推荐网站" class="headerlink" title="推荐网站"></a>推荐网站</h2><blockquote><ul><li><a href="https://music.163.com/">https://music.163.com</a> </li><li><a href="https://tool.liumingye.cn/music">https://tool.liumingye.cn/music</a></li></ul></blockquote>]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>友链</title>
+      <link href="/link/index.html"/>
+      <url>/link/index.html</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+    </entry>
+    
+    
+  
+</search>
