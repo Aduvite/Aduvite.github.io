@@ -8,7 +8,7 @@
       <link href="/2024/09/05/Debug/"/>
       <url>/2024/09/05/Debug/</url>
       
-        <content type="html"><![CDATA[<h2 id="question-1"><a href="#question-1" class="headerlink" title="question 1"></a>question 1</h2><p>在使用hexo d 命令部署到github上时,提示Warning如下：<br><img src="https://pic.imgdb.cn/item/66dd0c38d9c307b7e94f88b9.png"><br>在<strong>Windows</strong>环境中通常会遇到此类问题,此Warning对Project<strong>没有太大影响</strong>,如果对Code没有严格规范可以忽略.<br>原因：</p><blockquote><ul><li>Linux&#x2F;Uinx采用换行符LF表示下一行(LF:LineFeed:中文意思是换行),即:\n；</li><li>Windows采用回车+换行CRLF表示下一行(CRLF:CarriageReturn LineFeed,中文意思是回车换行),即:\r\n；</li><li>Mac OS采用回车CR表示下一行(CR:CarriageReturn,中文意思是回车),即：\r。</li></ul></blockquote><p>在git中可以输入一下命令查看git对待换行的方式：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config core.autocrlf</span><br></pre></td></tr></table></figure><p>可以使用以下gti命令修改设置：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git config --global core.autocrlf <span class="literal">true</span> 适用于Windows系统，且一般为Windows默认设置。</span><br><span class="line">git config --global core.autocrlf input 适用于Linux系统</span><br><span class="line">git config --global core.autocrlf <span class="literal">false</span> 适用于Windows系统,设置为<span class="literal">false</span>则不会显示上述Warning</span><br></pre></td></tr></table></figure><h2 id="question-2"><a href="#question-2" class="headerlink" title="question 2"></a>question 2</h2><p>如果使用hexo cl; hexo g; hexo d命令部署到github上出现github上只出现少数文件或空白(github上东西全没了)<br><del>那么恭喜你,你的computer被hack了.</del><br>这是因为node版本与hexo版本不兼容,使用低一点版本的node就行.</p><h2 id="持续Debug中"><a href="#持续Debug中" class="headerlink" title="持续Debug中~"></a>持续Debug中~</h2><hr>]]></content>
+        <content type="html"><![CDATA[<h2 id="question-1"><a href="#question-1" class="headerlink" title="question 1"></a>question 1</h2><p>在使用hexo d 命令部署到github上时,提示Warning如下：<br><img src="https://pic.imgdb.cn/item/66dd0c38d9c307b7e94f88b9.png"><br>在<strong>Windows</strong>环境中通常会遇到此类问题,此Warning对Project<strong>没有太大影响</strong>,如果对Code没有严格规范可以忽略.<br>原因：</p><blockquote><ul><li>Linux&#x2F;Uinx采用换行符LF表示下一行(LF:LineFeed:中文意思是换行),即:\n；</li><li>Windows采用回车+换行CRLF表示下一行(CRLF:CarriageReturn LineFeed,中文意思是回车换行),即:\r\n；</li><li>Mac OS采用回车CR表示下一行(CR:CarriageReturn,中文意思是回车),即：\r。</li></ul></blockquote><p>在git中可以输入以下命令查看git对待换行的方式：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config core.autocrlf</span><br></pre></td></tr></table></figure><p>可以使用以下gti命令修改设置：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git config --global core.autocrlf <span class="literal">true</span> 适用于Windows系统，且一般为Windows默认设置。</span><br><span class="line">git config --global core.autocrlf input 适用于Linux系统</span><br><span class="line">git config --global core.autocrlf <span class="literal">false</span> 适用于Windows系统,设置为<span class="literal">false</span>则不会显示上述Warning</span><br></pre></td></tr></table></figure><h2 id="question-2"><a href="#question-2" class="headerlink" title="question 2"></a>question 2</h2><p>如果使用hexo cl; hexo g; hexo d命令部署到github上出现github上只出现少数文件或空白(github上东西全没了)<br><del>那么恭喜你,你的computer被hack了.</del><br>这是因为node版本与hexo版本不兼容,使用低一点版本的node就行.</p><h2 id="持续Debug中"><a href="#持续Debug中" class="headerlink" title="持续Debug中~"></a>持续Debug中~</h2><hr>]]></content>
       
       
       <categories>
@@ -45,9 +45,9 @@
       
         <tags>
             
-            <tag> B+Tree </tag>
-            
             <tag> c++ </tag>
+            
+            <tag> B+Tree </tag>
             
         </tags>
       
@@ -72,9 +72,9 @@
       
         <tags>
             
-            <tag> c++ </tag>
-            
             <tag> B-Tree </tag>
+            
+            <tag> c++ </tag>
             
         </tags>
       
@@ -105,11 +105,33 @@
     
     
     <entry>
+      <title>分类</title>
+      <link href="/categories/index.html"/>
+      <url>/categories/index.html</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>关于</title>
       <link href="/about/index.html"/>
       <url>/about/index.html</url>
       
         <content type="html"><![CDATA[<p><img src="https://pic.imgdb.cn/item/66dc5383d9c307b7e93ddb00.jpg"></p>]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>音乐</title>
+      <link href="/music/index.html"/>
+      <url>/music/index.html</url>
+      
+        <content type="html"><![CDATA[<h2 id="推荐网站"><a href="#推荐网站" class="headerlink" title="推荐网站"></a>推荐网站</h2><blockquote><ul><li><a href="https://music.163.com/">https://music.163.com</a> </li><li><a href="https://tool.liumingye.cn/music">https://tool.liumingye.cn/music</a></li></ul></blockquote>]]></content>
       
     </entry>
     
@@ -138,31 +160,9 @@
     
     
     <entry>
-      <title>音乐</title>
-      <link href="/music/index.html"/>
-      <url>/music/index.html</url>
-      
-        <content type="html"><![CDATA[<h2 id="推荐网站"><a href="#推荐网站" class="headerlink" title="推荐网站"></a>推荐网站</h2><blockquote><ul><li><a href="https://music.163.com/">https://music.163.com</a> </li><li><a href="https://tool.liumingye.cn/music">https://tool.liumingye.cn/music</a></li></ul></blockquote>]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>标签</title>
       <link href="/tags/index.html"/>
       <url>/tags/index.html</url>
-      
-        <content type="html"><![CDATA[]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>分类</title>
-      <link href="/categories/index.html"/>
-      <url>/categories/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
       
