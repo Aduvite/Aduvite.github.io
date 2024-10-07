@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>红黑树</title>
+      <link href="/2024/10/01/%E7%BA%A2%E9%BB%91%E6%A0%91/"/>
+      <url>/2024/10/01/%E7%BA%A2%E9%BB%91%E6%A0%91/</url>
+      
+        <content type="html"><![CDATA[<h3 id="红黑树简介"><a href="#红黑树简介" class="headerlink" title="红黑树简介"></a>红黑树简介</h3><blockquote><ul><li>红黑树是一棵自平衡的二叉搜索树</li><li>红黑树属性:<br>  -&gt; 根属性: 树的根节点为黑色.<br>  -&gt; 叶属性: 每一个叶子结点都为黑色,叶子结点不存储任何数据(只作为树在此结束的标识).<br>  -&gt; 红属性: 树中不存在两个相邻的红色节点.<br>  -&gt; 深度属性: 从任意节点(包括根节点)到其任意叶子结点的每条简单路径都具有相同数量的黑点.<br>  -&gt; 红黑树的属性保证了从根节点到叶子节点的最长简单路径长度不超过最短简单路径长度的两倍.</li></ul></blockquote><h3 id="红黑树的基本操作"><a href="#红黑树的基本操作" class="headerlink" title="红黑树的基本操作"></a>红黑树的基本操作</h3><h3 id="1-红黑树的旋转"><a href="#1-红黑树的旋转" class="headerlink" title="1.红黑树的旋转"></a>1.红黑树的旋转</h3><ul><li><p>红黑树有两种基本旋转类型: 左旋转和右旋转</p></li><li><p><strong>红黑树的旋转类型与AVL树相同但旋转方式略有不同</strong></p><blockquote><ul><li>红黑树的旋转策略:<br>LL -&gt; 对插入节点的爷爷节点右旋转<br>RR -&gt; 对插入节点的爷爷节点左旋转<br>LR -&gt; 先对插入节点的父节点左旋再对插入节点的爷爷节点右旋<br>RL -&gt; 先对插入节点的父节点右旋再对插入节点的爷爷节点左旋</li></ul></blockquote></li><li><p>左旋转</p><blockquote><p>以中间节点(y)为基准与其父节点(x)进行对调,如果当前节点(y)有左孩子则连接到其父节点的右孩子上,如果当前节点(y)有右孩子则连着当前节点走.<br><img src="https://pic.imgdb.cn/item/67037bead29ded1a8c0fdd54.png"></p></blockquote><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 左旋转伪代码</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">LeftRotation</span><span class="params">(RBNode** root, RBNode* node)</span> </span>&#123;</span><br><span class="line">    RBNode* child = node -&gt; rchild;</span><br><span class="line">    node -&gt; rchild = child -&gt; lchild;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (child -&gt; lchild != <span class="literal">nullptr</span>) <span class="comment">//若child的左子树不为空</span></span><br><span class="line">        child -&gt; lchild -&gt; parent = node;</span><br><span class="line">    child -&gt; parent = node -&gt; parent;</span><br><span class="line">    <span class="keyword">if</span> (node -&gt; parent == <span class="literal">nullptr</span>) <span class="comment">//若node父节点为空,则将child设置为树的根节点</span></span><br><span class="line">        *root = child;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (node == node -&gt; parent -&gt; lchild) <span class="comment">//node不为空并node为父节点的左孩子</span></span><br><span class="line">        node -&gt; parent -&gt; lchild = child;</span><br><span class="line">    <span class="keyword">else</span> <span class="comment">//node不为空并node为父节点的右孩子</span></span><br><span class="line">       node -&gt; parent -&gt; rchild = child;</span><br><span class="line"></span><br><span class="line">    child -&gt; lchild = node;</span><br><span class="line">    node -&gt; parent = child; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li><li><p>右旋转</p><blockquote><p>以中间节点(y)为基准与其父节点(x)进行对调,如果当前节点(y)有右孩子则连接到其父节点的左孩子上,如果当前节点(y)有左孩子则连着当前节点走.<br><img src="https://pic.imgdb.cn/item/67037b05d29ded1a8c0ebfd4.png"></p></blockquote><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 右旋转伪代码</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">RightRotation</span><span class="params">(RBNode** root, RBNode* node)</span> </span>&#123;</span><br><span class="line">    RBNode* child = node -&gt; lchild;</span><br><span class="line">    node -&gt; lchild = child -&gt; rchild;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (child -&gt; rchild != <span class="literal">nullptr</span>)</span><br><span class="line">        child -&gt; rchild -&gt; parent = node;</span><br><span class="line">    child -&gt; parent = node -&gt; parent;</span><br><span class="line">    <span class="keyword">if</span> (node -&gt; parent == <span class="literal">nullptr</span>)</span><br><span class="line">        *root = child;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (node == node -&gt; parent -&gt; lchild)</span><br><span class="line">        node -&gt; parent -&gt; lchild = child;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        node -&gt; parent -&gt; rchild = child;</span><br><span class="line">    </span><br><span class="line">    child -&gt; rchild = node;</span><br><span class="line">    node -&gt; parent = child;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li></ul><h3 id="2-红黑树的插入"><a href="#2-红黑树的插入" class="headerlink" title="2.红黑树的插入"></a>2.红黑树的插入</h3><ul><li>新插入的节点颜色为红色(reason: 调整代价最少).</li><li>每插入一个节点都要对树结构进行调整.</li><li>若一个节点没有左(右)孩子,<strong>那么空节点的颜色为黑色,仅充当树在此结束的标识</strong>.</li><li>红黑树的插入与AVL树相同.</li></ul><h3 id="3-红黑树插入节点后的调整"><a href="#3-红黑树插入节点后的调整" class="headerlink" title="3.红黑树插入节点后的调整"></a>3.红黑树插入节点后的调整</h3><p>node -&gt; 插入节点<br>p -&gt; 插入节点的父节点<br>gp -&gt; 插入节点的爷爷节点</p><ul><li><p>若node的p是gp的左孩子</p><blockquote><ul><li>若node的gp的右孩子(右叔叔)是红色,只需要对父亲,叔叔,爷爷进行变色<br>-&gt; 把gp的(左右孩)子节点设置为黑色<br>-&gt; 把gp的颜色设置为红色<br>-&gt; 将gp作为node向上递归判断</li><li>若node的gp的右孩子(右叔叔)是黑色.<br>1.若node是p的右孩子(LR型)<br>-&gt; 先将p的值赋给node<br>-&gt; 对node(实际为p)左旋转<br>-&gt; 将p的颜色设置为黑色,将gp的颜色设置为红色<br>-&gt; 再对gp右旋转<br>2.若node是p的左孩子(LL型)<br>-&gt; 将p的颜色设置为黑色,将gp的颜色设置为红色<br>-&gt; 对gp右旋转</li></ul></blockquote></li><li><p>若node的p是gp的右孩子</p><blockquote><ul><li>若node的gp左孩子(左叔叔)是红色,只需要对父亲,叔叔,爷爷进行变色<br>-&gt; 把gp的(左右孩)子节点设置为黑色<br>-&gt; 把gp的颜色设置为红色<br>-&gt; 将gp作为node向上递归判断</li><li>若node的gp的左孩子(右叔叔)是黑色.<br>1.若node是p的左孩子(RL型)<br>-&gt; 先将p的值赋给node<br>-&gt; 对node(实际为p)右旋转<br>-&gt; 将p的颜色设置为黑色,将gp的颜色设置为红色<br>-&gt; 再对gp左旋转<br>2.若node是p的右孩子(RR型)<br>-&gt; 将p的颜色设置为黑色,将gp的颜色设置为红色<br>-&gt; 对gp左旋转</li></ul></blockquote></li><li><p>最后将根节点设置为黑色.</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 修复插入导致的冲突伪代码</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">fixViolation</span><span class="params">(<span class="keyword">struct</span> Node **root, <span class="keyword">struct</span> Node *z)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (z != *root &amp;&amp; z-&gt;parent-&gt;color == RED) &#123;</span><br><span class="line">        <span class="keyword">if</span> (z-&gt;parent == z-&gt;parent-&gt;parent-&gt;left) &#123;</span><br><span class="line">            <span class="keyword">struct</span> <span class="title class_">Node</span> *y = z-&gt;parent-&gt;parent-&gt;right;</span><br><span class="line">            <span class="keyword">if</span> (y != <span class="literal">NULL</span> &amp;&amp; y-&gt;color == RED) &#123;</span><br><span class="line">                z-&gt;parent-&gt;color = BLACK;</span><br><span class="line">                y-&gt;color = BLACK;</span><br><span class="line">                z-&gt;parent-&gt;parent-&gt;color = RED;</span><br><span class="line">                z = z-&gt;parent-&gt;parent; <span class="comment">//递归判断</span></span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (z == z-&gt;parent-&gt;right) &#123;</span><br><span class="line">                    z = z-&gt;parent;</span><br><span class="line">                    <span class="built_in">leftRotate</span>(root, z);</span><br><span class="line">                &#125;  </span><br><span class="line">                z-&gt;parent-&gt;color = BLACK;</span><br><span class="line">                z-&gt;parent-&gt;parent-&gt;color = RED;</span><br><span class="line">                <span class="built_in">rightRotate</span>(root, z-&gt;parent-&gt;parent);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">struct</span> Node *y = z-&gt;parent-&gt;parent-&gt;left;</span><br><span class="line">            <span class="keyword">if</span> (y != <span class="literal">NULL</span> &amp;&amp; y-&gt;color == RED) &#123;</span><br><span class="line">                z-&gt;parent-&gt;color = BLACK;</span><br><span class="line">                y-&gt;color = BLACK;</span><br><span class="line">                z-&gt;parent-&gt;parent-&gt;color = RED;</span><br><span class="line">                z = z-&gt;parent-&gt;parent;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (z == z-&gt;parent-&gt;left) &#123;</span><br><span class="line">                    z = z-&gt;parent;</span><br><span class="line">                    <span class="built_in">rightRotate</span>(root, z);</span><br><span class="line">                &#125;</span><br><span class="line">                z-&gt;parent-&gt;color = BLACK;</span><br><span class="line">                z-&gt;parent-&gt;parent-&gt;color = RED;</span><br><span class="line">                <span class="built_in">leftRotate</span>(root, z-&gt;parent-&gt;parent);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    (*root)-&gt;color = BLACK;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li></ul><h2 id="更新中"><a href="#更新中" class="headerlink" title="更新中~"></a>更新中~</h2><hr>]]></content>
+      
+      
+      <categories>
+          
+          <category> 数据结构 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> c++ </tag>
+            
+            <tag> 红黑树 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Hexo搭建博客遇到的一些Bug与Debug</title>
       <link href="/2024/09/05/Debug/"/>
       <url>/2024/09/05/Debug/</url>
@@ -33,7 +60,7 @@
       <link href="/2024/09/01/B-%E6%A0%91/"/>
       <url>/2024/09/01/B-%E6%A0%91/</url>
       
-        <content type="html"><![CDATA[<h2 id="B-Tree简介"><a href="#B-Tree简介" class="headerlink" title="B+Tree简介"></a>B+Tree简介</h2><blockquote><ul><li>B+Tree是在B-Tree的基础上的一种优化,满足B-Tree的性质.</li><li>非根节点关键字个数满足[m &#x2F; 2] - 1 &lt;&#x3D; keynum &lt;&#x3D; m,即内部子树个数(childnum)可以与关键字个数相等(keynum).</li><li>内部子树的关键字存储的为实际数据的副本,即只提供查找索引,存放的为其子树中最大的关键字值,实际数据只存放在叶子节点中.</li><li>B+树内部节点不存储数据，所有 data 存储在叶节点导致查询时间复杂度固定为 log(n)。而B-树查询时间复杂度不固定，与 key 在树中的位置有关，最好为O(1).</li><li>所有叶子结点之间用一个链指针相连.</li></ul></blockquote><h2 id="B-Tree结构体定义"><a href="#B-Tree结构体定义" class="headerlink" title="B+Tree结构体定义"></a>B+Tree结构体定义</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">Node</span> &#123;</span><br><span class="line">    <span class="type">int</span> level;</span><br><span class="line">    <span class="type">int</span> keynum;</span><br><span class="line">    <span class="type">int</span> childnum;</span><br><span class="line">    <span class="type">int</span>* keys;</span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">Node</span>* parent;</span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">Node</span>** children;</span><br><span class="line">&#125;Node;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">Leaf</span> &#123;</span><br><span class="line">    Node** next; <span class="comment">//叶子结点链式链接</span></span><br><span class="line">    Node* first; <span class="comment">//指向第一个叶子节点</span></span><br><span class="line">&#125;son</span><br></pre></td></tr></table></figure><hr><blockquote><p>B+Tree的插入操作和删除操作与B-Tree类似,这里介绍删除操作中的不同</p></blockquote><h2 id="B-Tree的删除"><a href="#B-Tree的删除" class="headerlink" title="B+Tree的删除"></a>B+Tree的删除</h2><ul><li>直接删除<br>叶子节点中的数据删除后若其在根节点中作为一个索引值,在不对树结构造成影响的情况下索引值可以不删除,造成影响则需要进行改变</li><li>不能直接删除<blockquote><ul><li>进行借操作或合并操作</li><li>借操作直接向左(右)兄弟节点中的合适key值拿来补位.</li><li>合并操作直接向左(右)兄弟进行合并,若合并后当前节点的父节点的childnum不满足性质,则需要向左兄弟借节点来满足,左兄弟节点为当前节点的父节点的左兄弟节点的最右子树.</li><li>任何调整操作在树结构中要对相应的索引值进行改变</li></ul></blockquote></li></ul><hr>]]></content>
+        <content type="html"><![CDATA[<h2 id="B-Tree简介"><a href="#B-Tree简介" class="headerlink" title="B+Tree简介"></a>B+Tree简介</h2><blockquote><ul><li>B+Tree是在B-Tree的基础上的一种优化,满足B-Tree的性质.</li><li>非根节点关键字个数满足[m &#x2F; 2] - 1 &lt;&#x3D; keynum &lt;&#x3D; m,即内部子树个数(childnum)可以与关键字个数相等(keynum).</li><li>内部子树的关键字存储的为实际数据的副本,即只提供查找索引,存放的为其子树中最大的关键字值,实际数据只存放在叶子节点中.</li><li>B+树内部节点不存储数据，所有 data 存储在叶节点导致查询时间复杂度固定为 log(n)。而B-树查询时间复杂度不固定，与 key 在树中的位置有关，最好为O(1).</li><li>所有叶子结点之间用一个链指针相连.</li></ul></blockquote><h2 id="B-Tree结构体定义"><a href="#B-Tree结构体定义" class="headerlink" title="B+Tree结构体定义"></a>B+Tree结构体定义</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">Node</span> &#123;</span><br><span class="line">    <span class="type">int</span> level;</span><br><span class="line">    <span class="type">int</span> keynum;</span><br><span class="line">    <span class="type">int</span> childnum;</span><br><span class="line">    <span class="type">int</span>* keys;</span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">Node</span>* parent;</span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">Node</span>** children;</span><br><span class="line">&#125;Node;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">Leaf</span> &#123;</span><br><span class="line">    Node** next; <span class="comment">//叶子结点链式链接</span></span><br><span class="line">    Node* first; <span class="comment">//指向第一个叶子节点</span></span><br><span class="line">&#125;son;</span><br></pre></td></tr></table></figure><hr><blockquote><p>B+Tree的插入操作和删除操作与B-Tree类似,这里介绍删除操作中的不同</p></blockquote><h2 id="B-Tree的删除"><a href="#B-Tree的删除" class="headerlink" title="B+Tree的删除"></a>B+Tree的删除</h2><ul><li>直接删除<br>叶子节点中的数据删除后若其在根节点中作为一个索引值,在不对树结构造成影响的情况下索引值可以不删除,造成影响则需要进行改变</li><li>不能直接删除<blockquote><ul><li>进行借操作或合并操作</li><li>借操作直接向左(右)兄弟节点中的合适key值拿来补位.</li><li>合并操作直接向左(右)兄弟进行合并,若合并后当前节点的父节点的childnum不满足性质,则需要向左兄弟借节点来满足,左兄弟节点为当前节点的父节点的左兄弟节点的最右子树.</li><li>任何调整操作在树结构中要对相应的索引值进行改变</li></ul></blockquote></li></ul><hr>]]></content>
       
       
       <categories>
@@ -105,33 +132,11 @@
     
     
     <entry>
-      <title></title>
-      <link href="/css/photo.css"/>
-      <url>/css/photo.css</url>
-      
-        <content type="html"><![CDATA[/* 页脚与头图透明 */#footer {    background: transparent !important;  }  #page-header {    background: transparent !important;  }    /* 白天模式遮罩透明 */  #footer::before {    background: transparent !important;  }  #page-header::before {    background: transparent !important;  }    /* 夜间模式遮罩透明 */  [data-theme="dark"] #footer::before {    background: transparent !important;  }  [data-theme="dark"] #page-header::before {    background: transparent !important;  }/* 文章卡片擦亮动画及文章栏 */#recent-posts>.recent-post-item .post_cover {  position: relative;}#recent-posts>.recent-post-item .post_cover::after {  position: absolute;  top: 0;  left: 0;  width: 100%;  height: 100%;  background: rgba(255, 255, 255, .5);  content: '';  -webkit-transition: -webkit-transform .3s;  -moz-transition: -moz-transform .3s;  -o-transition: -o-transform .3s;  -ms-transition: -ms-transform .3s;  transition: transform .3s;  -webkit-transform: scale3d(2, 1, 1) rotate(60deg) translate3d(15%, -150%, 0);  -moz-transform: scale3d(2, 1, 1) rotate(60deg) translate3d(15%, -150%, 0);  -o-transform: scale3d(2, 1, 1) rotate(60deg) translate3d(15%, -150%, 0);  -ms-transform: scale3d(2, 1, 1) rotate(60deg) translate3d(15%, -150%, 0);  transform: scale3d(2, 1, 1) rotate(60deg) translate3d(15%, -150%, 0);}#recent-posts>.recent-post-item .post_cover:hover::after {  -webkit-transform: scale3d(2, 1, 1) rotate(60deg) translate3d(0, 130%, 0);  -moz-transform: scale3d(2, 1, 1) rotate(60deg) translate3d(0, 130%, 0);  -o-transform: scale3d(2, 1, 1) rotate(60deg) translate3d(0, 130%, 0);  -ms-transform: scale3d(2, 1, 1) rotate(60deg) translate3d(0, 130%, 0);  transform: scale3d(2, 1, 1) rotate(60deg) translate3d(0, 130%, 0);}#recent-posts .recent-post-item:hover {  border: var(--style-border-hover)}#recent-posts .recent-post-item .recent-post-info .article-title:hover {  color: var(--anzhiyu-theme)}#post-info {  position: absolute;  bottom: 100px;    padding: 0 8%;  width: 50%;  text-align: center; /* 文章标题信息居中 */}]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>关于</title>
       <link href="/about/index.html"/>
       <url>/about/index.html</url>
       
         <content type="html"><![CDATA[<p><img src="https://pic.imgdb.cn/item/66dc5383d9c307b7e93ddb00.jpg"></p>]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>友链</title>
-      <link href="/link/index.html"/>
-      <url>/link/index.html</url>
-      
-        <content type="html"><![CDATA[]]></content>
       
     </entry>
     
@@ -149,6 +154,28 @@
     
     
     <entry>
+      <title>标签</title>
+      <link href="/tags/index.html"/>
+      <url>/tags/index.html</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>友链</title>
+      <link href="/link/index.html"/>
+      <url>/link/index.html</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>分类</title>
       <link href="/categories/index.html"/>
       <url>/categories/index.html</url>
@@ -160,11 +187,11 @@
     
     
     <entry>
-      <title>标签</title>
-      <link href="/tags/index.html"/>
-      <url>/tags/index.html</url>
+      <title></title>
+      <link href="/css/photo.css"/>
+      <url>/css/photo.css</url>
       
-        <content type="html"><![CDATA[]]></content>
+        <content type="html"><![CDATA[/* 页脚与头图透明 */#footer {    background: transparent !important;  }  #page-header {    background: transparent !important;  }    /* 白天模式遮罩透明 */  #footer::before {    background: transparent !important;  }  #page-header::before {    background: transparent !important;  }    /* 夜间模式遮罩透明 */  [data-theme="dark"] #footer::before {    background: transparent !important;  }  [data-theme="dark"] #page-header::before {    background: transparent !important;  }/* 文章卡片擦亮动画及文章栏 */#recent-posts>.recent-post-item .post_cover {  position: relative;}#recent-posts>.recent-post-item .post_cover::after {  position: absolute;  top: 0;  left: 0;  width: 100%;  height: 100%;  background: rgba(255, 255, 255, .5);  content: '';  -webkit-transition: -webkit-transform .3s;  -moz-transition: -moz-transform .3s;  -o-transition: -o-transform .3s;  -ms-transition: -ms-transform .3s;  transition: transform .3s;  -webkit-transform: scale3d(2, 1, 1) rotate(60deg) translate3d(15%, -150%, 0);  -moz-transform: scale3d(2, 1, 1) rotate(60deg) translate3d(15%, -150%, 0);  -o-transform: scale3d(2, 1, 1) rotate(60deg) translate3d(15%, -150%, 0);  -ms-transform: scale3d(2, 1, 1) rotate(60deg) translate3d(15%, -150%, 0);  transform: scale3d(2, 1, 1) rotate(60deg) translate3d(15%, -150%, 0);}#recent-posts>.recent-post-item .post_cover:hover::after {  -webkit-transform: scale3d(2, 1, 1) rotate(60deg) translate3d(0, 130%, 0);  -moz-transform: scale3d(2, 1, 1) rotate(60deg) translate3d(0, 130%, 0);  -o-transform: scale3d(2, 1, 1) rotate(60deg) translate3d(0, 130%, 0);  -ms-transform: scale3d(2, 1, 1) rotate(60deg) translate3d(0, 130%, 0);  transform: scale3d(2, 1, 1) rotate(60deg) translate3d(0, 130%, 0);}#recent-posts .recent-post-item:hover {  border: var(--style-border-hover)}#recent-posts .recent-post-item .recent-post-info .article-title:hover {  color: var(--anzhiyu-theme)}#post-info {  position: absolute;  bottom: 100px;    padding: 0 8%;  width: 50%;  text-align: center; /* 文章标题信息居中 */}]]></content>
       
     </entry>
     
