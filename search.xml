@@ -72,9 +72,9 @@
       
         <tags>
             
-            <tag> B+Tree </tag>
-            
             <tag> c++ </tag>
+            
+            <tag> B+Tree </tag>
             
         </tags>
       
@@ -99,9 +99,9 @@
       
         <tags>
             
-            <tag> c++ </tag>
-            
             <tag> B-Tree </tag>
+            
+            <tag> c++ </tag>
             
         </tags>
       
@@ -132,17 +132,6 @@
     
     
     <entry>
-      <title>分类</title>
-      <link href="/categories/index.html"/>
-      <url>/categories/index.html</url>
-      
-        <content type="html"><![CDATA[]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>关于</title>
       <link href="/about/index.html"/>
       <url>/about/index.html</url>
@@ -165,9 +154,9 @@
     
     
     <entry>
-      <title>友链</title>
-      <link href="/link/index.html"/>
-      <url>/link/index.html</url>
+      <title>分类</title>
+      <link href="/categories/index.html"/>
+      <url>/categories/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
       
@@ -190,6 +179,17 @@
       <title>标签</title>
       <link href="/tags/index.html"/>
       <url>/tags/index.html</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>友链</title>
+      <link href="/link/index.html"/>
+      <url>/link/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
       
