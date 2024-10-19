@@ -132,9 +132,31 @@
     
     
     <entry>
+      <title>关于</title>
+      <link href="/about/index.html"/>
+      <url>/about/index.html</url>
+      
+        <content type="html"><![CDATA[<p><img src="https://pic.imgdb.cn/item/66dc5383d9c307b7e93ddb00.jpg"></p><!-- 51la统计 <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script><script>LA.init({id:"3K2ovifUqZQqxV9Q",ck:"3K2ovifUqZQqxV9Q"})</script>-->]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>分类</title>
       <link href="/categories/index.html"/>
       <url>/categories/index.html</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>友链</title>
+      <link href="/link/index.html"/>
+      <url>/link/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
       
@@ -154,28 +176,6 @@
     
     
     <entry>
-      <title>关于</title>
-      <link href="/about/index.html"/>
-      <url>/about/index.html</url>
-      
-        <content type="html"><![CDATA[<p><img src="https://pic.imgdb.cn/item/66dc5383d9c307b7e93ddb00.jpg"></p><!-- 51la统计 <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script><script>LA.init({id:"3K2ovifUqZQqxV9Q",ck:"3K2ovifUqZQqxV9Q"})</script>-->]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>音乐</title>
-      <link href="/music/index.html"/>
-      <url>/music/index.html</url>
-      
-        <content type="html"><![CDATA[<h2 id="推荐网站"><a href="#推荐网站" class="headerlink" title="推荐网站"></a>推荐网站</h2><blockquote><ul><li><a href="https://music.163.com/">https://music.163.com</a> </li><li><a href="https://tool.liumingye.cn/music">https://tool.liumingye.cn/music</a></li></ul></blockquote>]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>标签</title>
       <link href="/tags/index.html"/>
       <url>/tags/index.html</url>
@@ -187,11 +187,11 @@
     
     
     <entry>
-      <title>友链</title>
-      <link href="/link/index.html"/>
-      <url>/link/index.html</url>
+      <title>音乐</title>
+      <link href="/music/index.html"/>
+      <url>/music/index.html</url>
       
-        <content type="html"><![CDATA[]]></content>
+        <content type="html"><![CDATA[<h2 id="推荐网站"><a href="#推荐网站" class="headerlink" title="推荐网站"></a>推荐网站</h2><blockquote><ul><li><a href="https://music.163.com/">https://music.163.com</a> </li><li><a href="https://tool.liumingye.cn/music">https://tool.liumingye.cn/music</a></li></ul></blockquote>]]></content>
       
     </entry>
     
